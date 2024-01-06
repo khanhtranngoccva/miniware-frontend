@@ -108,7 +108,7 @@ declare global {declare namespace Api {
       "size_of_uninitialized_data": number,
       "address_of_entry_point": number,
       "base_of_code": number,
-      "base_of_data": number,
+      "base_of_data": number|null,
       "image_base": number,
       "section_alignment": number,
       "file_alignment": number,
@@ -136,7 +136,6 @@ declare global {declare namespace Api {
       "high_entropy_virtual_address_space": boolean,
       "dynamic_base": boolean,
       "force_code_integrity": boolean,
-      "nx_compatible": boolean,
       "no_isolation": boolean,
       "no_structured_exception_handling": boolean,
       "no_bind": boolean,
@@ -237,3 +236,4 @@ declare global {declare namespace Api {
   }
 
 }
+

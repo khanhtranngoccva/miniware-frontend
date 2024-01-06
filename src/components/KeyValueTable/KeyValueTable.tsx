@@ -2,7 +2,7 @@
 import {ColumnDef, createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
 import * as React from 'react';
 
-export type KeyValuePair = [string, string | number];
+export type KeyValuePair = [string, string | number|boolean|null|undefined];
 
 const columnHelper = createColumnHelper<KeyValuePair>();
 const columns: ColumnDef<KeyValuePair>[] = [
@@ -17,7 +17,7 @@ const columns: ColumnDef<KeyValuePair>[] = [
     id: "value",
     header: "Value",
     cell: props => {
-      return props.getValue();
+      return props.getValue()?.toString();
     }
   }),
 ];
