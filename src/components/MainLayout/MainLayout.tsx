@@ -6,7 +6,7 @@ import Tabs from "@/components/Tabs";
 function MainLayout(props: {
   children?: React.ReactNode
 }) {
-  return <main className={"w-full h-full flex flex-col"}>
+  return <main className={"w-full h-full flex flex-col overflow-hidden"}>
     <NavigationBar></NavigationBar>
     <Tabs></Tabs>
     <div className={"flex-1 flex"}>

@@ -1,27 +1,35 @@
 import tab from "@/components/Tab";
 
-declare global {declare namespace Api {
-  interface Response<T> {
-    success: true,
-    data: T,
-  }
+declare global {
+  declare namespace Api {
+    interface Response<T> {
+      success: true,
+      data: T,
+    }
 
-  interface PaginatedResponse<T> {
-    success: true,
-    data: T[],
-    meta: {
-      next?: string,
-      prev?: string,
+    interface PaginatedResponse<T> {
+      success: true,
+      data: T[],
+      meta: {
+        next?: string,
+        prev?: string,
+      }
     }
   }
-}
 
   declare namespace Application {
     interface Analysis {
       id: number,
       file_id: number,
+      file: File,
       filename: string,
       state: "processing" | "complete",
+    }
+
+    interface File {
+      id: number;
+      size: number;
+      hashes: FileHash[];
     }
 
     interface FullAnalysis extends Analysis {
@@ -108,7 +116,7 @@ declare global {declare namespace Api {
       "size_of_uninitialized_data": number,
       "address_of_entry_point": number,
       "base_of_code": number,
-      "base_of_data": number|null,
+      "base_of_data": number | null,
       "image_base": number,
       "section_alignment": number,
       "file_alignment": number,

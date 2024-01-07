@@ -1,33 +1,43 @@
 "use client";
 import {ColumnDef, createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
 import * as React from 'react';
+import VerticalTable from "@/components/VerticalTable";
 
-export type KeyValuePair = [string, string | number|boolean|null|undefined];
+export type KeyValuePair = [string, string | number | boolean | null | undefined];
 
-const columnHelper = createColumnHelper<KeyValuePair>();
-const columns: ColumnDef<KeyValuePair>[] = [
-  columnHelper.accessor("0" as any, {
-    id: "key",
-    header: "",
-    cell: props => {
-      return props.getValue();
-    }
-  }),
-  columnHelper.accessor("1" as any, {
-    id: "value",
-    header: "Value",
-    cell: props => {
-      return props.getValue()?.toString();
-    }
-  }),
-];
+function useColumns(keyWidth?: number, valueWidth?: number) {
+  return React.useMemo(() => {
+    const columnHelper = createColumnHelper<KeyValuePair>();
+    const columns: ColumnDef<KeyValuePair>[] = [
+      columnHelper.accessor("0" as any, {
+        id: "key",
+        header: "",
+        size: keyWidth,
+        cell: props => {
+          return props.getValue();
+        }
+      }),
+      columnHelper.accessor("1" as any, {
+        id: "value",
+        header: "Value",
+        size: valueWidth,
+        cell: props => {
+          return props.getValue()?.toString();
+        }
+      }),
+    ];
+    return columns;
+  }, [keyWidth, valueWidth]);
+}
 
 
 function KeyValueTable(props: {
   data: KeyValuePair[]
+  keyWidth?: number,
+  valueWidth?: number,
 }) {
   const {data} = props;
-
+  const columns = useColumns(props.keyWidth, props.valueWidth);
   const table = useReactTable<KeyValuePair>({
     data,
     columns,
@@ -35,39 +45,7 @@ function KeyValueTable(props: {
   });
 
 
-  return <div>
-    <table>
-      <thead>
-      {
-        table.getHeaderGroups().map(headerGroup => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map(header => (
-              <th key={header.id} className={"px-2 py-1 border-border-1 border-[1px]"}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-              </th>
-            ))}
-          </tr>
-        ))
-      }
-      </thead>
-      <tbody>
-      {table.getRowModel().rows.map(row => {
-        return <tr key={row.id}>
-          {row.getVisibleCells().map(cell => {
-            return <td key={cell.id} className={"px-2 py-1 border-border-1 border-[1px]"}>
-              {flexRender(cell.column.columnDef.cell, cell.getContext())}
-            </td>;
-          })}
-        </tr>;
-      })}
-      </tbody>
-    </table>
-  </div>;
+  return <VerticalTable table={table}></VerticalTable>;
 }
 
 

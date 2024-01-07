@@ -9,6 +9,7 @@ export default async function AnalysisPage(props: {
 }) {
   const analysis = await getAnalysis(props.params.analysisId);
   const data: KeyValuePair[] = [
+    ["Size", `${analysis.file.size} bytes`],
     ["Entropy", analysis.basic_information.entropy],
     ["Import Hash", analysis.basic_information.imphash],
     ["Company", analysis.basic_information.company],
@@ -21,7 +22,10 @@ export default async function AnalysisPage(props: {
     ["Product Version", analysis.basic_information.product_version],
     ["Language ID", analysis.basic_information.language_id],
   ];
+  for (let hash of [...analysis.file.hashes].reverse()) {
+    data.splice(1, 0, [hash.algorithm.toUpperCase(), hash.value]);
+  }
   return <>
-    <KeyValueTable data={data}></KeyValueTable>
+    <KeyValueTable data={data} valueWidth={400}></KeyValueTable>
   </>;
 }

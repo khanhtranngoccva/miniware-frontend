@@ -31,7 +31,6 @@ export default async function  AnalysisPage(props: {
     ["System image", analysis.file_header.characteristics.system_image],
     ["Dynamic-link library (DLL)", analysis.file_header.characteristics.dynamic_link_library],
     ["Uniprocessor only", analysis.file_header.characteristics.uniprocessor_only],
-
   ];
   return <>
     <KeyValueTable data={data}></KeyValueTable>

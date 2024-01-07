@@ -47,9 +47,6 @@ export default async function AnalysisPage(props: {
         ["wdm_driver", `${characteristics.wdm_driver} `],
         ["supports_control_flow_guard", `${characteristics.supports_control_flow_guard} `],
         ["terminal_server_aware", `${characteristics.terminal_server_aware} `],
-
-
-
     ];
     return <>
         <KeyValueTable data={data}></KeyValueTable>

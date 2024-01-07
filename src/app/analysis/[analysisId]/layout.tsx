@@ -12,7 +12,7 @@ export default function AnalysisLayout(props: {
 
   return <>
     <AnalysisSidebar analysisId={analysisId}/>
-    <div className={"h-full bg-background-2 flex-1"}>
+    <div className={"h-full bg-background-2 flex-1 flex relative"}>
       {props.children}
     </div>
   </>;
