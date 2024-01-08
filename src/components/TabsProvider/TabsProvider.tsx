@@ -53,7 +53,7 @@ function TabsProvider(props: {
         draft.push(newTab);
       });
     });
-  }, []);
+  }, [closeTab]);
 
   return <TabsContext.Provider value={useMemoizedObject({
     tabs: tabs,

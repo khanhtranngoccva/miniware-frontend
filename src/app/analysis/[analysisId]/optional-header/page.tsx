@@ -49,6 +49,6 @@ export default async function AnalysisPage(props: {
         ["terminal_server_aware", `${characteristics.terminal_server_aware} `],
     ];
     return <>
-        <KeyValueTable data={data}></KeyValueTable>
+        <KeyValueTable data={data} valueWidth={400} keyWidth={400}></KeyValueTable>
     </>;
 }

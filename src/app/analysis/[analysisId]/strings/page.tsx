@@ -10,7 +10,6 @@ export default async function AnalysisPage(props: {
     }
 }) {
     const analysis = await getAnalysis(props.params.analysisId);
-    console.log(analysis.strings.length);
     return <>
         <StringTable data={analysis.strings}></StringTable>
     </>;

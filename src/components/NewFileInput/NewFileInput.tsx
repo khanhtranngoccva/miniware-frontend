@@ -16,6 +16,7 @@ function NewFileInput() {
       className={"opacity-0 w-full h-full absolute z-[1] cursor-pointer"}
       type={"file"}
       accept={".exe"}
+      draggable={true}
       onChange={e => {
         const files = e.currentTarget.files;
         if (files && files[0] && files[0].size > 0) {

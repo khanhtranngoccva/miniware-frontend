@@ -1,7 +1,11 @@
 "use client";
-import {ColumnDef, createColumnHelper, flexRender, getCoreRowModel, useReactTable} from "@tanstack/react-table";
+import {
+  ColumnDef,
+  createColumnHelper,
+} from "@tanstack/react-table";
 import * as React from 'react';
 import VerticalTable from "@/components/VerticalTable";
+import {useReactTable} from "@/hooks/useReactTable";
 
 export type KeyValuePair = [string, string | number | boolean | null | undefined];
 
@@ -41,7 +45,6 @@ function KeyValueTable(props: {
   const table = useReactTable<KeyValuePair>({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
   });
 
 

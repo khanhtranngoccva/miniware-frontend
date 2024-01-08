@@ -4,16 +4,16 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  useReactTable
 } from "@tanstack/react-table";
 import * as React from 'react';
 import VerticalTable from "@/components/VerticalTable";
 import {hexify} from "@/helpers/strings";
+import {useReactTable} from "@/hooks/useReactTable";
 
 function useTable(data: Application.Export[]) {
   const columns = React.useMemo(() => {
     const columnHelper = createColumnHelper<Application.Export>();
-    const columns: ColumnDef<Application.Export, any>[] = [
+    const columns: ColumnDef<Application.Export>[] = [
       columnHelper.accessor("ordinal", {
         header: "Ordinal",
       }),
@@ -26,14 +26,13 @@ function useTable(data: Application.Export[]) {
           return hexify(props.getValue());
         }
       }),
-    ];
+    ] as ColumnDef<Application.Export>[];
     return columns;
   }, []);
 
   return useReactTable<Application.Export>({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
   });
 }
 

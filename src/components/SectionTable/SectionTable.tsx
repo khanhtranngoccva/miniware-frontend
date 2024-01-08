@@ -3,31 +3,34 @@ import {
   ColumnDef,
   createColumnHelper,
   flexRender,
-  getCoreRowModel,
+  getCoreRowModel, getSortedRowModel, SortingState,
   useReactTable
 } from "@tanstack/react-table";
 import * as React from 'react';
 import {hexify} from "@/helpers/strings";
 import HorizontalTable from "@/components/HorizontalTable";
+import VerticalTable from "@/components/VerticalTable";
 
 type ProcessedSection = (Omit<Application.Section, "hashes"> & {
   hashes: Record<string, string>
 });
 
 function useTable(data: Application.Section[]) {
-  const processedSections: ProcessedSection[] = data.map(e => {
-    const objHashes: Record<string, string> = {};
-    for (let hash of e.hashes) {
-      objHashes[hash.algorithm] = hash.value;
-    }
-    return {
-      ...e,
-      hashes: objHashes
-    };
-  });
+  const processedSections: ProcessedSection[] = React.useMemo(() => {
+    return data.map(e => {
+      const objHashes: Record<string, string> = {};
+      for (let hash of e.hashes) {
+        objHashes[hash.algorithm] = hash.value;
+      }
+      return {
+        ...e,
+        hashes: objHashes
+      };
+    });
+  }, [data]);
   const columns = React.useMemo(() => {
     const columnHelper = createColumnHelper<ProcessedSection>();
-    const columns: ColumnDef<ProcessedSection, any>[] = [
+    const columns: ColumnDef<ProcessedSection>[] = [
       columnHelper.accessor("name", {
         header: "Name",
       }),
@@ -115,8 +118,7 @@ function useTable(data: Application.Section[]) {
       columnHelper.accessor("characteristics.object_file_section_to_remove_from_image", {
         header: "Object file section to remove from image",
       }),
-
-    ];
+    ] as ColumnDef<ProcessedSection>[];
     const hashSet = new Set<string>();
     for (let section of data) {
       const hashes = section.hashes;
@@ -130,7 +132,7 @@ function useTable(data: Application.Section[]) {
         cell(props) {
           return props.getValue()?.toString();
         }
-      }));
+      }) as ColumnDef<ProcessedSection>);
     }
     const stringify: typeof columns["0"]["cell"] = function (props) {
       return props.getValue()?.toString();
@@ -143,8 +145,10 @@ function useTable(data: Application.Section[]) {
 
   return useReactTable<ProcessedSection>({
     data: processedSections,
+    columnResizeMode: "onChange",
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 }
 
@@ -154,8 +158,7 @@ function SectionTable(props: {
 }) {
   const {data} = props;
   const table = useTable(data);
-
-  return <HorizontalTable table={table}></HorizontalTable>;
+  return <VerticalTable table={table}></VerticalTable>;
 }
 
 

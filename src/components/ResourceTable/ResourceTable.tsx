@@ -2,13 +2,11 @@
 import {
   ColumnDef,
   createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  useReactTable
 } from "@tanstack/react-table";
 import * as React from 'react';
 import VerticalTable from "@/components/VerticalTable";
 import {hexify} from "@/helpers/strings";
+import {useReactTable} from "@/hooks/useReactTable";
 
 type ProcessedResource = Omit<Application.Resource, "hashes"> & {
   hashes: Record<string, string>
@@ -42,7 +40,7 @@ function useTable(data: Application.Resource[]) {
       columnHelper.accessor("size", {
         header: "Size",
       }),
-    ];
+    ] as ColumnDef<ProcessedResource>[];
 
     const algorithms = new Set<string>();
     for (let resource of data) {
@@ -54,28 +52,30 @@ function useTable(data: Application.Resource[]) {
     for (let algorithm of Array.from(algorithms)) {
       columns.push(columnHelper.accessor(`hashes.${algorithm}`, {
         header: algorithm.toUpperCase()
-      }));
+      }) as ColumnDef<ProcessedResource>);
     }
 
     return columns;
   }, [data]);
 
-  const processedResources: ProcessedResource[] = [];
-  for (let resource of data) {
-    const hashObject: Record<string, string> = {};
-    for (let hash of resource.hashes) {
-      hashObject[hash.algorithm] = hash.value;
+  const processedResources = React.useMemo(() => {
+    const processedResources: ProcessedResource[] = [];
+    for (let resource of data) {
+      const hashObject: Record<string, string> = {};
+      for (let hash of resource.hashes) {
+        hashObject[hash.algorithm] = hash.value;
+      }
+      processedResources.push({
+        ...resource,
+        hashes: hashObject
+      });
     }
-    processedResources.push({
-      ...resource,
-      hashes: hashObject
-    });
-  }
+    return processedResources;
+  }, [data]);
 
   return useReactTable<ProcessedResource>({
     data: processedResources,
     columns,
-    getCoreRowModel: getCoreRowModel(),
   });
 }
 

@@ -33,6 +33,6 @@ export default async function  AnalysisPage(props: {
     ["Uniprocessor only", analysis.file_header.characteristics.uniprocessor_only],
   ];
   return <>
-    <KeyValueTable data={data}></KeyValueTable>
+    <KeyValueTable data={data} valueWidth={400} keyWidth={400}></KeyValueTable>
   </>;
 }

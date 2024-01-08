@@ -1,6 +1,30 @@
 import * as React from 'react';
-import {flexRender, Table} from "@tanstack/react-table";
+import {Cell, flexRender, Table} from "@tanstack/react-table";
 import {useVirtualizer} from "@tanstack/react-virtual";
+
+function TableCell<T, U>(props: {
+  cell: Cell<T, U>
+}) {
+  return <td
+    key={props.cell.id}
+    className={"flex overflow-hidden p-1 h-[1.5lh] px-2 items-center relative text-ellipsis border-border-1 border-b-[1px] border-r-[1px]"}
+    style={{
+      width: props.cell.column.getSize(),
+    }}
+  >
+    <div className={"w-full h-full flex text-ellipsis"} onClick={() => {
+      const val = props.cell.getValue();
+      if (val !== undefined && val !== null) {
+        navigator.clipboard.writeText(val.toString()).then();
+      }
+    }}>
+      {flexRender(
+        props.cell.column.columnDef.cell,
+        props.cell.getContext()
+      )}
+    </div>
+  </td>;
+}
 
 function VerticalTable<T>(props: {
   table: Table<T>
@@ -12,6 +36,7 @@ function VerticalTable<T>(props: {
   //The virtualizer needs to know the scrollable container element
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
+
     estimateSize: () => 33, //estimate row height for accurate scrollbar dragging
     getScrollElement: () => tableContainerRef.current,
     //measure dynamic row height, except in firefox because it measures table border height incorrectly
@@ -45,11 +70,16 @@ function VerticalTable<T>(props: {
                 return (
                   <th
                     key={header.id}
-                    className={"flex p-1 px-2 border-border-1 border-b-[1px] border-r-[1px] bg-background-3"}
+                    className={"flex p-1 px-2 border-border-1 border-b-[1px] border-r-[1px] bg-background-3 relative"}
                     style={{
                       width: header.getSize(),
                     }}
                   >
+                    {header.column.getCanResize() && <div
+                        className={`absolute w-[4px] bg-[#0004] h-full hover:bg-[#0008] top-0 right-0 select-none ${header.column.getIsResizing() ? "cursor-grabbing" : "cursor-col-resize"}`}
+                        onDoubleClick={() => header.column.resetSize()}
+                        onMouseDown={header.getResizeHandler()}
+                        onTouchStart={header.getResizeHandler()}/>}
                     <div
                       {...{
                         className: header.column.getCanSort()
@@ -94,20 +124,7 @@ function VerticalTable<T>(props: {
               >
                 {row.getVisibleCells().map(cell => {
                   return (
-                    <td
-                      key={cell.id}
-                      className={"flex overflow-hidden p-1 h-[1.5lh] px-2 items-center relative text-ellipsis border-border-1 border-b-[1px] border-r-[1px]"}
-                      style={{
-                        width: cell.column.getSize(),
-                      }}
-                    >
-                      <div className={"absolute w-max overflow-hidden text-ellipsis"}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </div>
-                    </td>
+                    <TableCell cell={cell} key={cell.id}></TableCell>
                   );
                 })}
               </tr>

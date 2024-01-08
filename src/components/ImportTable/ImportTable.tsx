@@ -1,38 +1,30 @@
 "use client";
-import {
-  ColumnDef,
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  useReactTable
-} from "@tanstack/react-table";
+import {ColumnDef, createColumnHelper,} from "@tanstack/react-table";
 import * as React from 'react';
 import VerticalTable from "@/components/VerticalTable";
 import {hexify} from "@/helpers/strings";
+import {useReactTable} from "@/hooks/useReactTable";
 
 function useTable(data: Application.Import[]) {
   const columns = React.useMemo(() => {
     const columnHelper = createColumnHelper<Application.Import>();
-    const columns: ColumnDef<Application.Import, any>[] = [
+    return [
       columnHelper.accessor("name", {
         header: "Name",
         size: 400,
       }),
       columnHelper.accessor("address", {
         header: "Address",
-
         cell: props => {
-          return hexify(props.getValue())
+          return hexify(props.getValue());
         }
       }),
-    ];
-    return columns;
+    ] as ColumnDef<Application.Import>[];
   }, []);
 
   return useReactTable<Application.Import>({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
   });
 }
 
