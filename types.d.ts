@@ -250,7 +250,7 @@ declare global {
       id: number,
       analysis_id: number,
       rule_name: string,
-      rule_namespace: string|null,
+      rule_namespace: string | null,
       rule_scope: string,
       matches: CAPAMatch[],
     }
@@ -260,14 +260,14 @@ declare global {
       capa_entry_id: number,
       location_type: string,
       location_value: number,
-      nodes: (CAPAStatementNode|CAPAFeatureNode)[],
+      nodes: (CAPAStatementNode | CAPAFeatureNode)[],
     }
 
     interface CAPANode {
       id: number,
       capa_match_id: number,
-      feature_data: any|null,
-      description: string|null,
+      feature_data: any | null,
+      description: string | null,
       type: string,
       subtype: string,
       path: string,
@@ -278,7 +278,7 @@ declare global {
     interface CAPAFeatureNode extends CAPANode {
       feature_data: any,
       type: "feature",
-      description: string|null,
+      description: string | null,
     }
 
     interface CAPAStatementNode extends CAPANode {
@@ -293,6 +293,5 @@ declare global {
       value: number,
     }
   }
-
 }
 

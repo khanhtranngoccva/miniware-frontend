@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import {Inter} from 'next/font/google';
 import './globals.css';
+import "@/helpers/patches";
 import React from "react";
 import MainLayout from "@/components/MainLayout";
 import TabsProvider from "@/components/TabsProvider";

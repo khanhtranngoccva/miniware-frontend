@@ -7,7 +7,7 @@ function TableCell<T, U>(props: {
 }) {
   return <td
     key={props.cell.id}
-    className={"flex overflow-hidden p-1 h-[1.5lh] px-2 items-center relative text-ellipsis border-border-1 border-b-[1px] border-r-[1px]"}
+    className={"flex overflow-shown p-1 px-2 items-center relative text-ellipsis border-border-1 border-b-[1px] border-r-[1px]"}
     style={{
       width: props.cell.column.getSize(),
     }}
