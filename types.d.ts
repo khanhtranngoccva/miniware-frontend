@@ -2,6 +2,9 @@ import tab from "@/components/Tab";
 
 declare global {
   declare namespace Api {
+    type LocationType = "relative" | "absolute";
+    type NodeType = "statement" | "feature";
+
     interface Response<T> {
       success: true,
       data: T,
@@ -41,6 +44,7 @@ declare global {
       resources: Resource[],
       sections: Section[],
       strings: String[],
+      capa: CAPAEntry[],
     }
 
     interface Hash {
@@ -240,6 +244,53 @@ declare global {
       start: number,
       end: number,
       definition: string,
+    }
+
+    interface CAPAEntry {
+      id: number,
+      analysis_id: number,
+      rule_name: string,
+      rule_namespace: string|null,
+      rule_scope: string,
+      matches: CAPAMatch[],
+    }
+
+    interface CAPAMatch {
+      id: number,
+      capa_entry_id: number,
+      location_type: string,
+      location_value: number,
+      nodes: (CAPAStatementNode|CAPAFeatureNode)[],
+    }
+
+    interface CAPANode {
+      id: number,
+      capa_match_id: number,
+      feature_data: any|null,
+      description: string|null,
+      type: string,
+      subtype: string,
+      path: string,
+      success: boolean,
+      locations: CAPANodeLocation[],
+    }
+
+    interface CAPAFeatureNode extends CAPANode {
+      feature_data: any,
+      type: "feature",
+      description: string|null,
+    }
+
+    interface CAPAStatementNode extends CAPANode {
+      feature_data: null,
+      type: "statement",
+    }
+
+    interface CAPANodeLocation {
+      id: number,
+      capa_node_id: number,
+      type: string,
+      value: number,
     }
   }
 
