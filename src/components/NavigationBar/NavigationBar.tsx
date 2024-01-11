@@ -7,11 +7,14 @@ import HorizontalContainer from "@/components/HorizontalContainer";
 import {getFile} from "@/helpers/getFile";
 import DownloadButton from "../DownloadButton";
 import ExportButton from "@/components/ExportButton";
+import useUploadFile from "@/hooks/useUploadFile";
 
 function NavigationBar() {
+  const uploadFile = useUploadFile();
+
   return <HorizontalContainer>
     <IconButton icon={FaRegFolderOpen} onClick={async () => {
-      console.log(await getFile());
+      await uploadFile(await getFile());
     }}></IconButton>
     <ExportButton></ExportButton>
     <DownloadButton></DownloadButton>
