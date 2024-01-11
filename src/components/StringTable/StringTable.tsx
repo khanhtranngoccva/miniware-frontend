@@ -13,7 +13,6 @@ import StringCell from "@/components/StringCell";
 
 function useTable(data: Application.String[]) {
   const columns = React.useMemo(() => {
-    console.log("Should not be re-rendering");
     const columnHelper = createColumnHelper<Application.String>();
     const columns: ColumnDef<Application.String>[] = [
       columnHelper.accessor("data", {
@@ -29,7 +28,7 @@ function useTable(data: Application.String[]) {
         size: 75,
         enableResizing: true,
         cell(props) {
-          return <span>{props.getValue()}</span>;
+          return <span className={"flex w-full h-full items-center"}>{props.getValue()}</span>;
         }
       }),
       columnHelper.accessor("tags", {
@@ -37,9 +36,9 @@ function useTable(data: Application.String[]) {
         enableResizing: true,
         size: 300,
         cell(props) {
-          return <ul className={"flex items-center gap-2"}>
+          return <ul className={"flex w-full h-full items-center gap-2"}>
             {props.getValue().map(tag => {
-              return <Tag tag={tag.tag} key={tag.id}></Tag>
+              return <Tag tag={tag.tag} key={tag.id}></Tag>;
             })}
           </ul>;
         }

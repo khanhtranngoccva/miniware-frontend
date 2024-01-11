@@ -24,6 +24,13 @@ function NewFileInput() {
         }
         e.currentTarget.value = "";
       }}
+      onDrop={e => {
+        const files = e.dataTransfer.files;
+        if (files && files[0] && files[0].size > 0) {
+          uploadFile(files[0]).then();
+        }
+        e.currentTarget.value = "";
+      }}
     />
   </div>;
 }

@@ -259,7 +259,7 @@ declare global {
       id: number,
       capa_entry_id: number,
       location_type: string,
-      location_value: number,
+      location_value: number|null,
       nodes: (CAPAStatementNode | CAPAFeatureNode)[],
     }
 
@@ -290,7 +290,7 @@ declare global {
       id: number,
       capa_node_id: number,
       type: string,
-      value: number,
+      value: number|null,
     }
   }
 

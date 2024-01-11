@@ -27,7 +27,7 @@ function StringCell(string: Application.String) {
 
   return <Tooltip.Root>
     <Tooltip.Trigger className={"w-full text-left"}>
-      <span className={"w-full overflow-shown font-mono"}>
+      <span className={"w-full break-words overflow-shown font-mono"}>
         {chars.map((char, index) => {
           return char.highlighted ? <Highlight char={char.char} key={index}></Highlight> : char.char;
         })}

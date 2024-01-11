@@ -12,7 +12,7 @@ function TableCell<T, U>(props: {
       width: props.cell.column.getSize(),
     }}
   >
-    <div className={"w-full h-full flex text-ellipsis"} onClick={() => {
+    <div className={"w-full h-full overflow-hidden text-ellipsis"} onClick={() => {
       const val = props.cell.getValue();
       if (val !== undefined && val !== null) {
         navigator.clipboard.writeText(val.toString()).then();
