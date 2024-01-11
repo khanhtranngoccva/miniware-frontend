@@ -17,7 +17,7 @@ export default async function AnalysisPage(props: {
         ["Magic", exe_header.magic],
         ["Linker version", `${exe_header.major_linker_version}.${exe_header.minor_linker_version}`],
         ["Size of code", `${exe_header.size_of_code} bytes`],
-        ["Size of code", `${exe_header.size_of_initialized_data} bytes`],
+        ["Size of initialized code", `${exe_header.size_of_initialized_data} bytes`],
         ["Size of uninitialized data", `${exe_header.size_of_uninitialized_data} bytes`],
         ["Address of entry point", hexify(exe_header.address_of_entry_point)],
         ["Base of code", hexify(exe_header.base_of_code)],

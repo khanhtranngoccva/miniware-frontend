@@ -293,5 +293,6 @@ declare global {
       value: number,
     }
   }
+
 }
 
