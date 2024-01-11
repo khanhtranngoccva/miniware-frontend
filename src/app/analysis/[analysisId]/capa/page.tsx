@@ -1,6 +1,6 @@
 import {getAnalysis} from "@/helpers/analysis";
 import React from "react";
-import TestComponent from "@/components/TestComponent";
+import CAPATable from "../../../../components/CAPATable";
 
 
 export default async function AnalysisPage(props: {
@@ -10,6 +10,6 @@ export default async function AnalysisPage(props: {
 }) {
     const analysis = await getAnalysis(props.params.analysisId);
     return <>
-        <TestComponent data={analysis.capa}></TestComponent>
+        <CAPATable data={analysis.capa}></CAPATable>
     </>;
 }

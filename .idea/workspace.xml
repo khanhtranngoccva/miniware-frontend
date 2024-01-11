@@ -4,11 +4,34 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc16a5a9-9774-44b4-872e-ef876d0c6d8c" name="Changes" comment="" />
+    <list default="true" id="fc16a5a9-9774-44b4-872e-ef876d0c6d8c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/helpers/download.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/analysis/[analysisId]/capa/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/analysis/[analysisId]/capa/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/analysis/[analysisId]/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/analysis/[analysisId]/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AnalysisSidebar/AnalysisSidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AnalysisSidebar/AnalysisSidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/NavigationBar/NavigationBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavigationBar/NavigationBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/StringCell/StringCell.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/StringCell/StringCell.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/StringTable/StringTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/StringTable/StringTable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Tab/Tab.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Tab/Tab.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TestComponent/TestComponent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CAPATable/CAPATable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TestComponent/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CAPATable/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/VerticalTable/VerticalTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/VerticalTable/VerticalTable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers/dataStructures/multiKeyMap.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/dataStructures/multiKeyMap.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/types.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/types.d.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -69,10 +92,23 @@
       <workItem from="1702904666902" duration="7000" />
       <workItem from="1702995957814" duration="11000" />
       <workItem from="1703067791932" duration="24000" />
+      <workItem from="1704943195053" duration="12581000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/components/CAPATable/CAPATable.tsx</url>
+          <line>69</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

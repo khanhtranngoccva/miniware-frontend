@@ -2,20 +2,26 @@
 import * as React from 'react';
 import {ColumnDef, createColumnHelper} from "@tanstack/react-table";
 import {useReactTable} from "@/hooks/useReactTable";
-import {useImmer} from "use-immer";
 import MultiKeyMap from "@/helpers/dataStructures/multiKeyMap";
 import {capitalize, hexify} from "@/helpers/strings";
-import {sort} from "next/dist/build/webpack/loaders/css-loader/src/utils";
 import VerticalTable from "@/components/VerticalTable";
-import {IoIosArrowDown, IoIosArrowUp} from "react-icons/io";
-import {useState} from "react";
+import {IoIosArrowDown, IoIosArrowForward} from "react-icons/io";
+import {MdCheckBox, MdOutlineCheckBoxOutlineBlank} from "react-icons/md";
 
 interface CAPARow {
   reactKey: string,
   indentation: number,
-  data: [boolean | null, string | null, string | null],
-  shown: boolean,
+  data: {
+    success: boolean | null,
+    node: string | null,
+    location: {
+      type: string,
+      value: number | null,
+    } | null,
+    namespace: string | null,
+  },
   toggled: boolean,
+
   onToggle(): void,
 }
 
@@ -23,16 +29,19 @@ function useTable(data: CAPARow[]) {
   const columns = React.useMemo(() => {
     const columnHelper = createColumnHelper<CAPARow>();
     const columns: ColumnDef<CAPARow>[] = [
-      columnHelper.accessor("data.0" as any, {
+      columnHelper.accessor("data.success", {
         enableSorting: false,
         enableResizing: false,
         size: 40,
         header: "",
         cell: (props) => {
-          return props.getValue();
+          return <div className={"w-full h-full flex items-center justify-center"}>
+            {props.getValue() ? <MdCheckBox></MdCheckBox> :
+              <MdOutlineCheckBoxOutlineBlank></MdOutlineCheckBoxOutlineBlank>}
+          </div>;
         }
       }),
-      columnHelper.accessor("data.1" as any, {
+      columnHelper.accessor("data.node", {
         enableSorting: false,
         minSize: 500,
         header: "Node",
@@ -43,14 +52,28 @@ function useTable(data: CAPARow[]) {
                                onToggle={original.onToggle}>{props.getValue()?.toString()}</IndentedCell>;
         }
       }),
-      columnHelper.accessor("data.2" as any, {
+      columnHelper.accessor("data.location", {
         enableSorting: false,
-        header: "Extra information",
+        minSize: 300,
+        header: "Location",
+        cell: (props) => {
+          const data = props.getValue();
+          if (!data) return null;
+          const type = capitalize(data.type);
+          return data.value !== null
+              ? <>{type} @ {hexify(data.value)}</>
+              : type;
+        }
+      }),
+      columnHelper.accessor("data.namespace", {
+        enableSorting: false,
+        minSize: 300,
+        header: "Namespace",
         cell: (props) => {
           return props.getValue();
         }
       }),
-    ];
+    ] as ColumnDef<CAPARow>[];
     return columns;
   }, []);
 
@@ -66,13 +89,14 @@ function IndentedCell(props: {
   indentation: number,
   onToggle(): void,
 }) {
-  const Component = props.toggled ? IoIosArrowDown : IoIosArrowUp;
-
-  return <div className={"flex font-mono gap-2"}>
+  const Component = props.toggled ? IoIosArrowDown : IoIosArrowForward;
+  return <div className={"flex font-mono w-full h-full gap-2 items-center"}>
     <div className={"h-full flex-none"} style={{
       width: `${2 * props.indentation ?? 0}ch`,
     }}></div>
-    <button onClick={props.onToggle} className={"w-4"}>
+    <button onClick={() => {
+      props.onToggle();
+    }} className={"w-4"}>
       <Component/>
     </button>
     {props.children}
@@ -101,46 +125,67 @@ function sortPaths(path1: number[], path2: number[]) {
   return 0;
 }
 
-function TestComponent(props: {
+function useUpdate(): [number, () => void] {
+  const [updateCount, setUpdateCount] = React.useState(0);
+
+  const update = React.useCallback(() => {
+    setUpdateCount(c => {
+      return c + 1;
+    });
+  }, []);
+
+  return [updateCount, update];
+}
+
+function CAPATable(props: {
   data: Application.CAPAEntry[]
 }) {
   const capaRawData = props.data;
-  const [toggleState, setToggleState] = useState({
-    toggleState: new MultiKeyMap<number, boolean>(true),
-  });
+  const [updateCount, update] = useUpdate();
+  const toggleStateRef = React.useRef(new MultiKeyMap<number, boolean>(false));
   const toggle = React.useCallback((path: number[]) => {
-    setToggleState(({toggleState}) => {
-      toggleState.set(path, !toggleState.get(path));
-      return {toggleState};
-    });
-  }, [setToggleState]);
-
+    const toggleState = toggleStateRef.current;
+    toggleState.set(path, !toggleState.get(path));
+    update();
+  }, []);
   const data: CAPARow[] = React.useMemo(() => {
     const result: CAPARow[] = [];
-    const innerToggleState = toggleState.toggleState;
-
+    const innerToggleState = toggleStateRef.current;
     for (let entry of capaRawData) {
       const entryId = entry.id;
       const path = [entryId];
       result.push({
         reactKey: path.join("."),
-        shown: true,
         indentation: 0,
-        data: [true, entry.rule_name, entry.rule_namespace],
+        data: {
+          success: true,
+          node: entry.rule_name,
+          location: null,
+          namespace: entry.rule_namespace
+        },
         toggled: innerToggleState.get(path),
         onToggle: () => toggle(path),
       });
       for (let match of entry.matches) {
         const matchId = match.id;
         const path = [entryId, matchId];
-        result.push({
-          reactKey: path.join("."),
-          shown: checkIfPathToBeShown(innerToggleState, path),
-          data: [true, `${entry.rule_scope} @ ${hexify(match.location_value)}`, `${capitalize(match.location_type)} location`],
-          indentation: path.length - 1,
-          toggled: innerToggleState.get(path),
-          onToggle: () => toggle(path),
-        });
+        if (checkIfPathToBeShown(innerToggleState, path)) {
+          result.push({
+            reactKey: path.join("."),
+            data: {
+              success: true,
+              namespace: null,
+              location: {
+                type: match.location_type,
+                value: match.location_value,
+              },
+              node: entry.rule_scope,
+            },
+            indentation: path.length - 1,
+            toggled: innerToggleState.get(path),
+            onToggle: () => toggle(path),
+          });
+        }
         const nodes: CAPARow[] = match.nodes.map(original => {
           return {
             ...original,
@@ -151,32 +196,33 @@ function TestComponent(props: {
         }).map(sortedNode => {
           const path = [entryId, matchId, ...sortedNode.numericPath];
           let displayString: string;
-          let location: string | null = null;
           if (sortedNode.type === "feature") {
             displayString = `Feature ${sortedNode.subtype}: ${sortedNode.feature_data}`;
-            if (sortedNode.locations[0]) {
-              location = `@ ${hexify(sortedNode.locations[0]?.value)}`;
-            }
           } else {
             displayString = `${sortedNode.subtype}`;
           }
-          return {
-            reactKey: path.join("."),
-            data: [sortedNode.success, displayString, location],
-            shown: checkIfPathToBeShown(innerToggleState, path),
-            indentation: path.length - 1,
-            toggled: innerToggleState.get(path),
-            onToggle: () => toggle(path),
-          };
-        });
+          if (checkIfPathToBeShown(innerToggleState, path)) {
+            return {
+              reactKey: path.join("."),
+              data: {
+                success: sortedNode.success,
+                namespace: null,
+                location: sortedNode.locations[0] ?? null,
+                node: displayString,
+              },
+              indentation: path.length - 1,
+              toggled: innerToggleState.get(path),
+              onToggle: () => toggle(path),
+            };
+          } else {
+            return undefined;
+          }
+        }).filter(Boolean) as CAPARow[];
         result.push(...nodes);
       }
     }
-
-    console.log(innerToggleState);
-
     return result;
-  }, [toggle, capaRawData, toggleState]);
+  }, [toggle, capaRawData, updateCount]);
   const table = useTable(data);
 
   return <div className={"font-mono text-sm w-full h-full"}>
@@ -184,4 +230,4 @@ function TestComponent(props: {
   </div>;
 }
 
-export default TestComponent;
+export default CAPATable;
