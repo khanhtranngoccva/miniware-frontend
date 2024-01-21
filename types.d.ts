@@ -299,5 +299,6 @@ declare global {
       value: number|null,
     }
   }
+
 }
 
