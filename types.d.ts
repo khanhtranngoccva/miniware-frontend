@@ -45,6 +45,12 @@ declare global {
       sections: Section[],
       strings: String[],
       capa: CAPAEntry[],
+      packers: Packer[]
+    }
+
+    interface Packer {
+      analysis_id: number,
+      signature: string,
     }
 
     interface Hash {
