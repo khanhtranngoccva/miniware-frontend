@@ -1,7 +1,7 @@
 import React from "react";
 import {TabsContext} from "@/components/TabsProvider";
 import {useRouter} from "next/navigation";
-import api from "@/helpers/api";
+import {frontendApi} from "@/helpers/api";
 
 export default function useUploadFile() {
     const {createTab} = React.useContext(TabsContext);
@@ -10,7 +10,7 @@ export default function useUploadFile() {
     return React.useCallback(async (file: File) => {
         const fd = new FormData();
         fd.append("file", file);
-        const res = await api.post<Api.Response<Application.Analysis>>("/upload", fd);
+        const res = await frontendApi.post<Api.Response<Application.Analysis>>("/upload", fd);
         const newTab = {
             analysisId: res.data.data.id.toString(),
             filename: res.data.data.filename,
